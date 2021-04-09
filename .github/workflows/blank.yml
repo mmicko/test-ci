@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: 'https://github.com/yosyshq/fpga-nightly'
+          repository: 'yosyshq/fpga-nightly'
       - name: Add docker repository
         env:
           DEBIAN_FRONTEND: noninteractive
