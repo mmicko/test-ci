@@ -46,14 +46,14 @@ jobs:
       - name: Pip depencencies
         run: pip install click
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=ecpprog
+        run: ./nightly.py build --arch=linux-x64 --target=dfu-util
       - uses: actions/upload-artifact@v2
         with:
-          name: ecpprog
-          path: _outputs/linux-x64/ecpprog/*.tgz 
+          name: dfu-util
+          path: _outputs/linux-x64/dfu-util/*.tgz 
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: True
           tag: fpga-nightly-${{ steps.date.outputs.date }}
-          artifacts: "_outputs/linux-x64/ecpprog/*.tgz"
+          artifacts: "_outputs/linux-x64/dfu-util/*.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
