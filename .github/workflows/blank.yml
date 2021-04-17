@@ -25,7 +25,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: _sources
-          key: cache-sources
+          key: cache-sources-${{ hashFiles('**/.git/ORIG_HEAD') }} 
+          restore-keys: |
+            cache-sources-
       - name: Add docker repository
         env:
           DEBIAN_FRONTEND: noninteractive
