@@ -39,3 +39,7 @@ jobs:
         run: pip install click
       - name: Build
         run: ./nightly.py build --arch=linux-x64 --target=ecpprog
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ecpprog
+          path: _outputs/linux-x64/ecpprog/*.tgz 
