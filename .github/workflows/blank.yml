@@ -51,3 +51,9 @@ jobs:
         with:
           name: ecpprog
           path: _outputs/linux-x64/ecpprog/*.tgz 
+      - uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: True
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/ecpprog/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
