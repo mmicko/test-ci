@@ -20,8 +20,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: _sources
-          key: cache-sources-${{ hashFiles('**/.git/ORIG_HEAD') }} 
+          key: cache-sources-${{ steps.date.outputs.date }}
           restore-keys: |
+            cache-sources-${{ steps.date.outputs.date }}
             cache-sources-
       - name: Build
         run: ./nightly.py build --arch=linux-x64 --target=dfu-util
