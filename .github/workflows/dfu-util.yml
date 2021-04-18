@@ -2,7 +2,11 @@ name: dfu-util
 
 on:
   workflow_dispatch:
-
+    inputs:
+      rebuild:
+        description: 'Rebuild (yes/no) ?'
+        required: true
+        default: 'no'
 jobs:
   dfu-util:
     runs-on: ubuntu-latest
@@ -21,6 +25,7 @@ jobs:
       - name: Cache hashes
         id: cache-hashes
         uses: actions/cache@v2
+        if: ${{ github.event.inputs.rebuild }} == 'no'
         with:
           path: _hashes
           key: cache-hashes-linux-x64-dfu-util-${{ steps.date.outputs.date }}
