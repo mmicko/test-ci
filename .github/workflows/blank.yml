@@ -25,7 +25,7 @@ jobs:
             cache-sources-${{ steps.date.outputs.date }}
             cache-sources-
       - name: Build
-        run: ls -la _sources/
+        run: cat _sources/dfu-util/.git/ORIG_HEAD
       - name: Build
         run: ./nightly.py build --arch=linux-x64 --target=dfu-util
       - uses: actions/upload-artifact@v2
