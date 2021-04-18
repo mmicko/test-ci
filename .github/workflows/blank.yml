@@ -44,4 +44,44 @@ jobs:
           tag: fpga-nightly-${{ steps.date.outputs.date }}
           artifacts: "_outputs/linux-x64/sby/*.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+  linux-x64-sby-gui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-sby-gui-${{ steps.date.outputs.date }}
+      - name: Cache output hash
+        id: cache-hash
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hash-linux-x64-sby-gui-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hash-linux-x64-sby-gui-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-sby-gui-
+      - name: Build
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=sby-gui
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/sby-gui/*') != ''
+        with:
+          allowUpdates: True
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/sby-gui/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
