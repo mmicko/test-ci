@@ -11,7 +11,7 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      - name: Get current date
+      - name: Get yesterdays date
         id: yesterday
         run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
       - uses: actions/checkout@v2
@@ -36,7 +36,6 @@ jobs:
           restore-keys: |
             cache-hashes-linux-x64-dfu-util-${{ steps.date.outputs.date }}
             cache-hashes-linux-x64-dfu-util-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-dfu-util-
       - name: Build
         run: ./nightly.py build --arch=linux-x64 --target=dfu-util
       - uses: actions/upload-artifact@v2
