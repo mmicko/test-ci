@@ -1,0 +1,1282 @@
+name: linux-x64 
+
+on:
+  workflow_dispatch:
+
+jobs:
+  linux-x64-python3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-python3-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-python3-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-python3-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-python3-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=python3
+  linux-x64-xdot:
+    runs-on: ubuntu-latest
+    needs: linux-x64-python3
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-xdot-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-xdot-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-xdot-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-xdot-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=xdot
+  linux-x64-yosys:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-yosys-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-yosys-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-yosys-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-yosys-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=yosys
+  linux-x64-nextpnr-bba:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-nextpnr-bba-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-nextpnr-bba-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-nextpnr-bba-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-nextpnr-bba-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-bba
+  linux-x64-nextpnr-generic:
+    runs-on: ubuntu-latest
+    needs: [ linux-x64-python3, linux-x64-nextpnr-bba ]
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-nextpnr-generic-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-nextpnr-generic-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-nextpnr-generic-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-nextpnr-generic-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-generic
+  linux-x64-icestorm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-icestorm-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-icestorm-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-icestorm-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-icestorm-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=icestorm
+  linux-x64-icestorm-bba:
+    runs-on: ubuntu-latest
+    needs: linux-x64-icestorm
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-icestorm-bba-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-icestorm-bba-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-icestorm-bba-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-icestorm-bba-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=icestorm-bba
+  linux-x64-nextpnr-ice40:
+    runs-on: ubuntu-latest
+    needs: [ linux-x64-python3, linux-x64-nextpnr-bba, linux-x64-icestorm-bba ]
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-nextpnr-ice40-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-nextpnr-ice40-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-nextpnr-ice40-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-nextpnr-ice40-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-ice40
+  linux-x64-prjtrellis-bba:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-prjtrellis-bba-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-prjtrellis-bba-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-prjtrellis-bba-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-prjtrellis-bba-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=prjtrellis-bba
+  linux-x64-nextpnr-ecp5:
+    runs-on: ubuntu-latest
+    needs: [ linux-x64-python3, linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba ]
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-nextpnr-ecp5-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-nextpnr-ecp5-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-nextpnr-ecp5-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-nextpnr-ecp5-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-ecp5
+  linux-x64-nextpnr-machxo2:
+    runs-on: ubuntu-latest
+    needs: [ linux-x64-python3, linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba ]
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-nextpnr-machxo2-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-nextpnr-machxo2-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-nextpnr-machxo2-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-nextpnr-machxo2-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-machxo2
+  linux-x64-prjoxide:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-prjoxide-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-prjoxide-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-prjoxide-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-prjoxide-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=prjoxide
+  linux-x64-prjoxide-bba:
+    runs-on: ubuntu-latest
+    needs: linux-x64-prjoxide
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-prjoxide-bba-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-prjoxide-bba-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-prjoxide-bba-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-prjoxide-bba-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=prjoxide-bba
+  linux-x64-nextpnr-nexus:
+    runs-on: ubuntu-latest
+    needs: [ linux-x64-python3, linux-x64-nextpnr-bba, linux-x64-prjoxide-bba ]
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-nextpnr-nexus-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-nextpnr-nexus-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-nextpnr-nexus-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-nextpnr-nexus-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-nexus
+  linux-x64-prjtrellis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-prjtrellis-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-prjtrellis-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-prjtrellis-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-prjtrellis-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=prjtrellis
+  linux-x64-dfu-util:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-dfu-util-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-dfu-util-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-dfu-util-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-dfu-util-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=dfu-util
+  linux-x64-ecpprog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-ecpprog-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-ecpprog-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-ecpprog-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-ecpprog-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=ecpprog
+  linux-x64-openfpgaloader:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-openfpgaloader-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-openfpgaloader-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-openfpgaloader-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-openfpgaloader-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=openfpgaloader
+  linux-x64-avy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-avy-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-avy-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-avy-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-avy-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=avy
+  linux-x64-boolector:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-boolector-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-boolector-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-boolector-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-boolector-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=boolector
+  linux-x64-yices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-yices-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-yices-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-yices-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-yices-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=yices
+  linux-x64-python2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-python2-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-python2-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-python2-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-python2-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=python2
+  linux-x64-suprove:
+    runs-on: ubuntu-latest
+    needs: linux-x64-python2
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-suprove-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-suprove-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-suprove-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-suprove-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=suprove
+  linux-x64-cvc4:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-cvc4-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-cvc4-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-cvc4-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-cvc4-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=cvc4
+  linux-x64-smt-switch:
+    runs-on: ubuntu-latest
+    needs: [ linux-x64-cvc4, linux-x64-boolector ]
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-smt-switch-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-smt-switch-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-smt-switch-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-smt-switch-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=smt-switch
+  linux-x64-pono:
+    runs-on: ubuntu-latest
+    needs: [ linux-x64-smt-switch, linux-x64-boolector ]
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-pono-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-pono-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-pono-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-pono-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=pono
+  linux-x64-z3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-z3-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-z3-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-z3-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-z3-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=z3
+  linux-x64-flask:
+    runs-on: ubuntu-latest
+    needs: linux-x64-python3
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-flask-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-flask-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-flask-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-flask-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=flask
+  linux-x64-mcy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-mcy-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-mcy-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-mcy-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-mcy-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=mcy
+  linux-x64-sby:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-sby-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-sby-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-sby-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-sby-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=sby
+  linux-x64-sby-gui:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-sby-gui-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-sby-gui-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-sby-gui-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-sby-gui-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=sby-gui
+  linux-x64-gtkwave:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-gtkwave-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-gtkwave-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-gtkwave-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-gtkwave-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=gtkwave
+  linux-x64-verilator:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-verilator-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-verilator-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-verilator-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-verilator-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=verilator
+  linux-x64-iverilog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-iverilog-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-iverilog-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-iverilog-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-iverilog-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=iverilog
+  linux-x64-litex:
+    runs-on: ubuntu-latest
+    needs: linux-x64-python3
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-litex-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-litex-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-litex-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-litex-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=litex
+  linux-x64-ecpdap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-ecpdap-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-ecpdap-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-ecpdap-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-ecpdap-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=ecpdap
+  linux-x64-fujprog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-fujprog-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-fujprog-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-fujprog-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-fujprog-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=fujprog
+  linux-x64-python-programmers:
+    runs-on: ubuntu-latest
+    needs: linux-x64-python3
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-python-programmers-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-python-programmers-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-python-programmers-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-python-programmers-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=python-programmers
+  linux-x64-openocd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-openocd-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-openocd-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-openocd-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-openocd-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=openocd
+  linux-x64-icesprog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-icesprog-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-icesprog-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-icesprog-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-icesprog-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=icesprog
+  linux-x64-system:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-system-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-system-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-system-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-system-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=system
+  linux-x64-default:
+    runs-on: ubuntu-latest
+    needs: [ linux-x64-yosys, linux-x64-nextpnr-generic, linux-x64-nextpnr-ice40, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-icestorm, linux-x64-prjtrellis, linux-x64-dfu-util, linux-x64-ecpprog, linux-x64-openfpgaloader, linux-x64-avy, linux-x64-boolector, linux-x64-yices, linux-x64-suprove, linux-x64-pono, linux-x64-z3, linux-x64-mcy, linux-x64-sby, linux-x64-sby-gui, linux-x64-gtkwave, linux-x64-verilator, linux-x64-iverilog, linux-x64-litex, linux-x64-ecpdap, linux-x64-fujprog, linux-x64-python-programmers, linux-x64-openocd, linux-x64-icesprog, linux-x64-flask, linux-x64-python2, linux-x64-xdot, linux-x64-system, linux-x64-python3 ]
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-default-${{ steps.date.outputs.date }}
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-default-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-default-${{ steps.yesterday.outputs.date }}
+            cache-hashes-linux-x64-default-
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=default
+
