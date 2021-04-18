@@ -1,0 +1,38 @@
+name: dfu-util
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dfu-util:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Get yesterdays date
+        id: yesterday
+        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
+      - uses: actions/checkout@v2
+        with:
+          repository: 'yosyshq/fpga-nightly'
+          ref: 'packages'
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-linux-x64-dfu-util-${{ steps.date.outputs.date }}
+          restore-keys: |
+            cache-hashes-linux-x64-dfu-util-${{ steps.yesterday.outputs.date }}
+      - name: Build
+        run: ./nightly.py build --arch=linux-x64 --target=dfu-util
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/dfu-util/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/dfu-util/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
