@@ -11,11 +11,6 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      - name: Test with environment variables
-        run: echo $TAG_NAME - $RELEASE_NAME
-        env:
-          TAG_NAME: nightly-tag-${{ steps.date.outputs.date }}
-          RELEASE_NAME: nightly-release-${{ steps.date.outputs.date }}
       - uses: actions/checkout@v2
         with:
           repository: 'yosyshq/fpga-nightly'
@@ -28,8 +23,6 @@ jobs:
           key: cache-sources-${{ hashFiles('**/.git/ORIG_HEAD') }} 
           restore-keys: |
             cache-sources-
-      - name: Pip depencencies
-        run: pip install click
       - name: Build
         run: ./nightly.py build --arch=linux-x64 --target=dfu-util
       - uses: actions/upload-artifact@v2
