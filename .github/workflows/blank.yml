@@ -25,7 +25,6 @@ jobs:
           path: _sources
           key: cache-sources-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-sources-${{ steps.date.outputs.date }}
             cache-sources-
       - name: Cache hashes
         id: cache-hashes
@@ -34,7 +33,6 @@ jobs:
           path: _hashes
           key: cache-hashes-linux-x64-dfu-util-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-dfu-util-${{ steps.date.outputs.date }}
             cache-hashes-linux-x64-dfu-util-${{ steps.yesterday.outputs.date }}
             cache-hashes-linux-x64-dfu-util-
       - name: Build
