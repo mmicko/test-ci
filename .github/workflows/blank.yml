@@ -31,8 +31,6 @@ jobs:
           path: _hashes
           key: cache-hashes-linux-x64-dfu-util
       - name: Build
-        run: cat _sources/dfu-util/.git/ORIG_HEAD
-      - name: Build
         run: ./nightly.py build --arch=linux-x64 --target=dfu-util
       - uses: actions/upload-artifact@v2
         with:
