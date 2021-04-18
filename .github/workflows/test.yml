@@ -23,17 +23,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-python3-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-python3-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-python3-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-python3-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-python3-
+            cache-hash-linux-x64-python3-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-python3-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=python3
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=python3
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/python3/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/python3/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-xdot:
     runs-on: ubuntu-latest
     needs: linux-x64-python3
@@ -54,17 +62,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-xdot-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-xdot-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-xdot-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-xdot-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-xdot-
+            cache-hash-linux-x64-xdot-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-xdot-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=xdot
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=xdot
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/xdot/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/xdot/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-yosys:
     runs-on: ubuntu-latest
     steps:
@@ -84,17 +100,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-yosys-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-yosys-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-yosys-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-yosys-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-yosys-
+            cache-hash-linux-x64-yosys-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-yosys-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=yosys
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=yosys
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/yosys/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/yosys/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-bba:
     runs-on: ubuntu-latest
     steps:
@@ -114,17 +138,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-nextpnr-bba-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-nextpnr-bba-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-nextpnr-bba-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-nextpnr-bba-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-nextpnr-bba-
+            cache-hash-linux-x64-nextpnr-bba-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-nextpnr-bba-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-bba
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=nextpnr-bba
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/nextpnr-bba/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/nextpnr-bba/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-generic:
     runs-on: ubuntu-latest
     needs: [ linux-x64-python3, linux-x64-nextpnr-bba ]
@@ -145,17 +177,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-nextpnr-generic-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-nextpnr-generic-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-nextpnr-generic-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-nextpnr-generic-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-nextpnr-generic-
+            cache-hash-linux-x64-nextpnr-generic-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-nextpnr-generic-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-generic
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=nextpnr-generic
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/nextpnr-generic/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/nextpnr-generic/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-icestorm:
     runs-on: ubuntu-latest
     steps:
@@ -175,17 +215,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-icestorm-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-icestorm-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-icestorm-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-icestorm-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-icestorm-
+            cache-hash-linux-x64-icestorm-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-icestorm-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=icestorm
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=icestorm
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/icestorm/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/icestorm/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-icestorm-bba:
     runs-on: ubuntu-latest
     needs: linux-x64-icestorm
@@ -206,17 +254,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-icestorm-bba-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-icestorm-bba-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-icestorm-bba-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-icestorm-bba-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-icestorm-bba-
+            cache-hash-linux-x64-icestorm-bba-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-icestorm-bba-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=icestorm-bba
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=icestorm-bba
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/icestorm-bba/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/icestorm-bba/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-ice40:
     runs-on: ubuntu-latest
     needs: [ linux-x64-python3, linux-x64-nextpnr-bba, linux-x64-icestorm-bba ]
@@ -237,17 +293,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-nextpnr-ice40-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-nextpnr-ice40-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-nextpnr-ice40-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-nextpnr-ice40-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-nextpnr-ice40-
+            cache-hash-linux-x64-nextpnr-ice40-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-nextpnr-ice40-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-ice40
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=nextpnr-ice40
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/nextpnr-ice40/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/nextpnr-ice40/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjtrellis-bba:
     runs-on: ubuntu-latest
     steps:
@@ -267,17 +331,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-prjtrellis-bba-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-prjtrellis-bba-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-prjtrellis-bba-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-prjtrellis-bba-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-prjtrellis-bba-
+            cache-hash-linux-x64-prjtrellis-bba-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-prjtrellis-bba-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=prjtrellis-bba
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=prjtrellis-bba
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/prjtrellis-bba/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/prjtrellis-bba/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-ecp5:
     runs-on: ubuntu-latest
     needs: [ linux-x64-python3, linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba ]
@@ -298,17 +370,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-nextpnr-ecp5-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-nextpnr-ecp5-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-nextpnr-ecp5-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-nextpnr-ecp5-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-nextpnr-ecp5-
+            cache-hash-linux-x64-nextpnr-ecp5-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-nextpnr-ecp5-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-ecp5
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=nextpnr-ecp5
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/nextpnr-ecp5/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/nextpnr-ecp5/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-machxo2:
     runs-on: ubuntu-latest
     needs: [ linux-x64-python3, linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba ]
@@ -329,17 +409,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-nextpnr-machxo2-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-nextpnr-machxo2-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-nextpnr-machxo2-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-nextpnr-machxo2-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-nextpnr-machxo2-
+            cache-hash-linux-x64-nextpnr-machxo2-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-nextpnr-machxo2-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-machxo2
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=nextpnr-machxo2
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/nextpnr-machxo2/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/nextpnr-machxo2/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjoxide:
     runs-on: ubuntu-latest
     steps:
@@ -359,17 +447,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-prjoxide-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-prjoxide-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-prjoxide-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-prjoxide-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-prjoxide-
+            cache-hash-linux-x64-prjoxide-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-prjoxide-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=prjoxide
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=prjoxide
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/prjoxide/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/prjoxide/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjoxide-bba:
     runs-on: ubuntu-latest
     needs: linux-x64-prjoxide
@@ -390,17 +486,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-prjoxide-bba-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-prjoxide-bba-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-prjoxide-bba-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-prjoxide-bba-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-prjoxide-bba-
+            cache-hash-linux-x64-prjoxide-bba-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-prjoxide-bba-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=prjoxide-bba
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=prjoxide-bba
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/prjoxide-bba/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/prjoxide-bba/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-nexus:
     runs-on: ubuntu-latest
     needs: [ linux-x64-python3, linux-x64-nextpnr-bba, linux-x64-prjoxide-bba ]
@@ -421,17 +525,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-nextpnr-nexus-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-nextpnr-nexus-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-nextpnr-nexus-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-nextpnr-nexus-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-nextpnr-nexus-
+            cache-hash-linux-x64-nextpnr-nexus-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-nextpnr-nexus-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=nextpnr-nexus
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=nextpnr-nexus
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/nextpnr-nexus/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/nextpnr-nexus/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjtrellis:
     runs-on: ubuntu-latest
     steps:
@@ -451,17 +563,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-prjtrellis-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-prjtrellis-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-prjtrellis-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-prjtrellis-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-prjtrellis-
+            cache-hash-linux-x64-prjtrellis-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-prjtrellis-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=prjtrellis
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=prjtrellis
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/prjtrellis/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/prjtrellis/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-dfu-util:
     runs-on: ubuntu-latest
     steps:
@@ -481,17 +601,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-dfu-util-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-dfu-util-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-dfu-util-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-dfu-util-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-dfu-util-
+            cache-hash-linux-x64-dfu-util-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-dfu-util-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=dfu-util
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=dfu-util
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/dfu-util/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/dfu-util/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-ecpprog:
     runs-on: ubuntu-latest
     steps:
@@ -511,17 +639,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-ecpprog-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-ecpprog-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-ecpprog-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-ecpprog-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-ecpprog-
+            cache-hash-linux-x64-ecpprog-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-ecpprog-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=ecpprog
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=ecpprog
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/ecpprog/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/ecpprog/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-openfpgaloader:
     runs-on: ubuntu-latest
     steps:
@@ -541,17 +677,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-openfpgaloader-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-openfpgaloader-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-openfpgaloader-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-openfpgaloader-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-openfpgaloader-
+            cache-hash-linux-x64-openfpgaloader-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-openfpgaloader-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=openfpgaloader
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=openfpgaloader
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/openfpgaloader/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/openfpgaloader/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-avy:
     runs-on: ubuntu-latest
     steps:
@@ -571,17 +715,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-avy-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-avy-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-avy-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-avy-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-avy-
+            cache-hash-linux-x64-avy-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-avy-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=avy
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=avy
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/avy/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/avy/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-boolector:
     runs-on: ubuntu-latest
     steps:
@@ -601,17 +753,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-boolector-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-boolector-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-boolector-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-boolector-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-boolector-
+            cache-hash-linux-x64-boolector-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-boolector-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=boolector
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=boolector
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/boolector/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/boolector/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-yices:
     runs-on: ubuntu-latest
     steps:
@@ -631,17 +791,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-yices-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-yices-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-yices-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-yices-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-yices-
+            cache-hash-linux-x64-yices-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-yices-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=yices
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=yices
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/yices/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/yices/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-python2:
     runs-on: ubuntu-latest
     steps:
@@ -661,17 +829,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-python2-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-python2-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-python2-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-python2-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-python2-
+            cache-hash-linux-x64-python2-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-python2-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=python2
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=python2
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/python2/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/python2/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-suprove:
     runs-on: ubuntu-latest
     needs: linux-x64-python2
@@ -692,17 +868,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-suprove-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-suprove-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-suprove-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-suprove-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-suprove-
+            cache-hash-linux-x64-suprove-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-suprove-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=suprove
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=suprove
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/suprove/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/suprove/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-cvc4:
     runs-on: ubuntu-latest
     steps:
@@ -722,17 +906,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-cvc4-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-cvc4-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-cvc4-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-cvc4-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-cvc4-
+            cache-hash-linux-x64-cvc4-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-cvc4-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=cvc4
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=cvc4
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/cvc4/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/cvc4/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-smt-switch:
     runs-on: ubuntu-latest
     needs: [ linux-x64-cvc4, linux-x64-boolector ]
@@ -753,17 +945,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-smt-switch-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-smt-switch-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-smt-switch-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-smt-switch-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-smt-switch-
+            cache-hash-linux-x64-smt-switch-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-smt-switch-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=smt-switch
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=smt-switch
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/smt-switch/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/smt-switch/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-pono:
     runs-on: ubuntu-latest
     needs: [ linux-x64-smt-switch, linux-x64-boolector ]
@@ -784,17 +984,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-pono-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-pono-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-pono-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-pono-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-pono-
+            cache-hash-linux-x64-pono-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-pono-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=pono
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=pono
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/pono/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/pono/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-z3:
     runs-on: ubuntu-latest
     steps:
@@ -814,17 +1022,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-z3-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-z3-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-z3-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-z3-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-z3-
+            cache-hash-linux-x64-z3-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-z3-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=z3
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=z3
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/z3/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/z3/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-flask:
     runs-on: ubuntu-latest
     needs: linux-x64-python3
@@ -845,17 +1061,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-flask-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-flask-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-flask-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-flask-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-flask-
+            cache-hash-linux-x64-flask-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-flask-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=flask
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=flask
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/flask/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/flask/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-mcy:
     runs-on: ubuntu-latest
     steps:
@@ -875,17 +1099,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-mcy-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-mcy-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-mcy-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-mcy-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-mcy-
+            cache-hash-linux-x64-mcy-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-mcy-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=mcy
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=mcy
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/mcy/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/mcy/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-sby:
     runs-on: ubuntu-latest
     steps:
@@ -905,17 +1137,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-sby-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-sby-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-sby-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-sby-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-sby-
+            cache-hash-linux-x64-sby-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-sby-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=sby
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=sby
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/sby/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/sby/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-sby-gui:
     runs-on: ubuntu-latest
     steps:
@@ -935,17 +1175,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-sby-gui-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-sby-gui-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-sby-gui-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-sby-gui-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-sby-gui-
+            cache-hash-linux-x64-sby-gui-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-sby-gui-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=sby-gui
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=sby-gui
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/sby-gui/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/sby-gui/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-gtkwave:
     runs-on: ubuntu-latest
     steps:
@@ -965,17 +1213,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-gtkwave-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-gtkwave-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-gtkwave-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-gtkwave-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-gtkwave-
+            cache-hash-linux-x64-gtkwave-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-gtkwave-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=gtkwave
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=gtkwave
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/gtkwave/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/gtkwave/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-verilator:
     runs-on: ubuntu-latest
     steps:
@@ -995,17 +1251,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-verilator-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-verilator-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-verilator-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-verilator-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-verilator-
+            cache-hash-linux-x64-verilator-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-verilator-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=verilator
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=verilator
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/verilator/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/verilator/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-iverilog:
     runs-on: ubuntu-latest
     steps:
@@ -1025,17 +1289,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-iverilog-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-iverilog-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-iverilog-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-iverilog-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-iverilog-
+            cache-hash-linux-x64-iverilog-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-iverilog-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=iverilog
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=iverilog
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/iverilog/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/iverilog/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-litex:
     runs-on: ubuntu-latest
     needs: linux-x64-python3
@@ -1056,17 +1328,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-litex-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-litex-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-litex-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-litex-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-litex-
+            cache-hash-linux-x64-litex-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-litex-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=litex
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=litex
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/litex/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/litex/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-ecpdap:
     runs-on: ubuntu-latest
     steps:
@@ -1086,17 +1366,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-ecpdap-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-ecpdap-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-ecpdap-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-ecpdap-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-ecpdap-
+            cache-hash-linux-x64-ecpdap-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-ecpdap-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=ecpdap
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=ecpdap
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/ecpdap/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/ecpdap/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-fujprog:
     runs-on: ubuntu-latest
     steps:
@@ -1116,17 +1404,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-fujprog-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-fujprog-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-fujprog-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-fujprog-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-fujprog-
+            cache-hash-linux-x64-fujprog-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-fujprog-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=fujprog
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=fujprog
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/fujprog/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/fujprog/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-python-programmers:
     runs-on: ubuntu-latest
     needs: linux-x64-python3
@@ -1147,17 +1443,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-python-programmers-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-python-programmers-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-python-programmers-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-python-programmers-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-python-programmers-
+            cache-hash-linux-x64-python-programmers-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-python-programmers-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=python-programmers
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=python-programmers
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/python-programmers/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/python-programmers/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-openocd:
     runs-on: ubuntu-latest
     steps:
@@ -1177,17 +1481,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-openocd-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-openocd-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-openocd-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-openocd-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-openocd-
+            cache-hash-linux-x64-openocd-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-openocd-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=openocd
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=openocd
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/openocd/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/openocd/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-icesprog:
     runs-on: ubuntu-latest
     steps:
@@ -1207,17 +1519,25 @@ jobs:
         with:
           path: _sources
           key: cache-sources-icesprog-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-icesprog-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-icesprog-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-icesprog-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-icesprog-
+            cache-hash-linux-x64-icesprog-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-icesprog-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=icesprog
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=icesprog
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/icesprog/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/icesprog/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-system:
     runs-on: ubuntu-latest
     steps:
@@ -1237,20 +1557,28 @@ jobs:
         with:
           path: _sources
           key: cache-sources-system-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-system-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-system-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-system-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-system-
+            cache-hash-linux-x64-system-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-system-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=system
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=system
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/system/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/system/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-default:
     runs-on: ubuntu-latest
-    needs: [ linux-x64-yosys, linux-x64-nextpnr-generic, linux-x64-nextpnr-ice40, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-icestorm, linux-x64-prjtrellis, linux-x64-dfu-util, linux-x64-ecpprog, linux-x64-openfpgaloader, linux-x64-avy, linux-x64-boolector, linux-x64-yices, linux-x64-suprove, linux-x64-pono, linux-x64-z3, linux-x64-mcy, linux-x64-sby, linux-x64-sby-gui, linux-x64-gtkwave, linux-x64-verilator, linux-x64-iverilog, linux-x64-litex, linux-x64-ecpdap, linux-x64-fujprog, linux-x64-python-programmers, linux-x64-openocd, linux-x64-icesprog, linux-x64-flask, linux-x64-python2, linux-x64-xdot, linux-x64-system, linux-x64-python3 ]
+    needs: [ linux-x64-yosys, linux-x64-nextpnr-generic, linux-x64-nextpnr-ice40, linux-x64-nextpnr-ecp5, linux-x64-nextpnr-machxo2, linux-x64-nextpnr-nexus, linux-x64-icestorm, linux-x64-prjtrellis, linux-x64-dfu-util, linux-x64-ecpprog, linux-x64-openfpgaloader, linux-x64-avy, linux-x64-boolector, linux-x64-yices, linux-x64-suprove, linux-x64-pono, linux-x64-z3, linux-x64-mcy, linux-x64-sby, linux-x64-sby-gui, linux-x64-gtkwave, linux-x64-verilator, linux-x64-iverilog, linux-x64-litex, linux-x64-ecpdap, linux-x64-fujprog, linux-x64-python-programmers, linux-x64-openocd, linux-x64-icesprog, linux-x64-python2, linux-x64-xdot, linux-x64-flask, linux-x64-system, linux-x64-python3 ]
     steps:
       - name: Get current date
         id: date
@@ -1268,15 +1596,22 @@ jobs:
         with:
           path: _sources
           key: cache-sources-default-${{ steps.date.outputs.date }}
-      - name: Cache hashes
-        id: cache-hashes
+      - name: Cache output hash
+        id: cache-hash
         uses: actions/cache@v2
         with:
           path: _hashes
-          key: cache-hashes-linux-x64-default-${{ steps.date.outputs.date }}
+          key: cache-hash-linux-x64-default-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-hashes-linux-x64-default-${{ steps.yesterday.outputs.date }}
-            cache-hashes-linux-x64-default-
+            cache-hash-linux-x64-default-${{ steps.yesterday.outputs.date }}
+            cache-hash-linux-x64-default-
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=default
-
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=default
+      - uses: ncipollo/release-action@v1
+        if: hashFiles('_outputs/linux-x64/default/*') != ''
+        with:
+          allowUpdates: True
+          body: ""
+          tag: fpga-nightly-${{ steps.date.outputs.date }}
+          artifacts: "_outputs/linux-x64/default/*.tgz"
+          token: ${{ secrets.GITHUB_TOKEN }}
