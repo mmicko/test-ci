@@ -24,6 +24,12 @@ jobs:
           restore-keys: |
             cache-sources-${{ steps.date.outputs.date }}
             cache-sources-
+      - name: Cache hashes
+        id: cache-hashes
+        uses: actions/cache@v2
+        with:
+          path: _hashes
+          key: cache-hashes-util
       - name: Build
         run: cat _sources/dfu-util/.git/ORIG_HEAD
       - name: Build
