@@ -33,12 +33,12 @@ jobs:
       - name: Build
         run: ./nightly.py build --arch=linux-x64 --target=dfu-util
       - uses: actions/upload-artifact@v2
-        if: hashFiles('_outputs/linux-x64/dfu-util/dfu-util-linux-x64.tgz') != ''
+        if: hashFiles('_outputs/linux-x64/dfu-util/*') != ''
         with:
           name: dfu-util
           path: _outputs/linux-x64/dfu-util/*.tgz 
       - uses: ncipollo/release-action@v1
-        if: hashFiles('_outputs/linux-x64/dfu-util/dfu-util-linux-x64.tgz') != ''
+        if: hashFiles('_outputs/linux-x64/dfu-util/*') != ''
         with:
           allowUpdates: True
           body: ""
