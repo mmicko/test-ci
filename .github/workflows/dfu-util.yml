@@ -10,8 +10,9 @@ on:
 jobs:
   dfu-util:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Get current date
+        run: echo "Rebuild:${{ github.event.inputs.rebuild }}!"
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
