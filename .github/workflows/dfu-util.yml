@@ -23,10 +23,10 @@ jobs:
         with:
           repository: 'yosyshq/fpga-nightly'
           ref: 'packages'
-      - name: Cache hashes
-        id: cache-hashes
-        uses: actions/cache@v2
+      - uses: actions/cache@v2
         if: ${{ github.event.inputs.rebuild }} == 'no'
+        name: Cache hashes
+        id: cache-hashes
         with:
           path: _hashes
           key: cache-hashes-linux-x64-dfu-util-${{ steps.date.outputs.date }}
