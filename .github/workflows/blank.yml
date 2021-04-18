@@ -6,6 +6,7 @@ on:
 jobs:
   sources:
     runs-on: ubuntu-latest
+    steps:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
