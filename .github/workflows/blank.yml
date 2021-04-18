@@ -19,9 +19,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: _sources
-          key: cache-sources-${{ steps.date.outputs.date }}
+          key: cache-sources-full-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-sources-
+            cache-sources-full-
       - name: Get sources
         run: ./nightly.py source
 
@@ -44,9 +44,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: _sources
-          key: cache-sources-${{ steps.date.outputs.date }}
+          key: cache-sources-full-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-sources-
+            cache-sources-full-
       - name: Cache hashes
         id: cache-hashes
         uses: actions/cache@v2
@@ -91,9 +91,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: _sources
-          key: cache-sources-${{ steps.date.outputs.date }}
+          key: cache-sources-full-${{ steps.date.outputs.date }}
           restore-keys: |
-            cache-sources-
+            cache-sources-full-
       - name: Cache hashes
         id: cache-hashes
         uses: actions/cache@v2
