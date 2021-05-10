@@ -6,29 +6,13 @@ jobs:
   dfu-util:
     runs-on: ubuntu-latest
     steps:
-      - name: Get current date
-        run: echo "Rebuild:${{ github.event.inputs.rebuild }}!"
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      - name: Get yesterdays date
-        id: yesterday
-        run: echo "::set-output name=date::$(date --date="yesterday" +'%Y-%m-%d')"
       - uses: actions/checkout@v2
         with:
           repository: 'yosyshq/fpga-nightly'
-      - uses: actions/cache@v2
-        name: Cache hashes
-        id: cache-hashes
-        with:
-          path: _hashes
-          key: cache-hashes-linux-x64-dfu-util-${{ steps.date.outputs.date }}
-          restore-keys: |
-            cache-hashes-linux-x64-dfu-util-${{ steps.yesterday.outputs.date }}
       - name: Build
         run: |
           ./nightly.py build --arch=linux-x64 --target=dfu-util
-          tar cvfz dfu-util.tar.gz _outputs/linux-x64/dfu-util/*
+          tar cvfz dfu-util.tar.gz _outputs/linux-x64/dfu-util
       - uses: ncipollo/release-action@v1
         if: hashFiles('dfu-util.tar.gz') != ''
         with:
