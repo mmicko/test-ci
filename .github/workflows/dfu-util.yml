@@ -2,11 +2,6 @@ name: dfu-util
 
 on:
   workflow_dispatch:
-    inputs:
-      rebuild:
-        description: 'Rebuild (yes/no) ?'
-        required: true
-        default: 'no'
 jobs:
   dfu-util:
     runs-on: ubuntu-latest
@@ -22,9 +17,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: 'yosyshq/fpga-nightly'
-          ref: 'packages'
       - uses: actions/cache@v2
-        if: ${{ github.event.inputs.rebuild }} == 'no'
         name: Cache hashes
         id: cache-hashes
         with:
@@ -33,12 +26,14 @@ jobs:
           restore-keys: |
             cache-hashes-linux-x64-dfu-util-${{ steps.yesterday.outputs.date }}
       - name: Build
-        run: ./nightly.py build --arch=linux-x64 --target=dfu-util
+        run: |
+          ./nightly.py build --arch=linux-x64 --target=dfu-util
+          tar cvfz dfu-util.tar.gz _outputs/linux-x64/dfu-util/*
       - uses: ncipollo/release-action@v1
-        if: hashFiles('_outputs/linux-x64/dfu-util/*') != ''
+        if: hashFiles('dfu-util.tar.gz') != ''
         with:
           allowUpdates: True
           body: ""
-          tag: fpga-nightly-${{ steps.date.outputs.date }}
-          artifacts: "_outputs/linux-x64/dfu-util/*.tgz"
+          tag: bucket
+          artifacts: "dfu-util.tar.gz"
           token: ${{ secrets.GITHUB_TOKEN }}
