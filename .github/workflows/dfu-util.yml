@@ -9,6 +9,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: 'yosyshq/fpga-nightly'
+      - name: Download a file
+        run: |
+          wget https://github.com/mmicko/test-ci/releases/download/bucket/dfu-util.tar.gz -O dfu-util.tar.gz
+          tar xvfz dfu-util.tar.gz
+          rm dfu-util.tar.gz        
       - name: Build
         run: |
           ./nightly.py build --arch=linux-x64 --target=dfu-util
