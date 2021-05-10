@@ -12,8 +12,10 @@ jobs:
       - name: Download a file
         run: |
           wget https://github.com/mmicko/test-ci/releases/download/bucket/dfu-util.tar.gz -O dfu-util.tar.gz
-          tar xvfz dfu-util.tar.gz
-          rm dfu-util.tar.gz        
+          if [[ $? -eq 0 ]]; then
+            tar xvfz dfu-util.tar.gz
+            rm dfu-util.tar.gz        
+          fi
       - name: Build
         run: |
           ./nightly.py build --arch=linux-x64 --target=dfu-util
