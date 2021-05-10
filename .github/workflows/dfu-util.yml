@@ -13,7 +13,7 @@ jobs:
         run: |
           URL="https://github.com/mmicko/test-ci/releases/download/bucket/dfu-util.tar.gz"
           if wget --spider "${URL}" 2>/dev/null; then
-              wget -qO- "${URL}" | tar xvz -
+              wget -qO- "${URL}" | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
