@@ -13,12 +13,9 @@ jobs:
         run: |
           URL="https://github.com/mmicko/test-ci/releases/download/bucket/dfu-util.tar.gz"
           if wget --spider "${URL}" 2>/dev/null; then
-              echo "OK !"
-              wget "${URL}" -O dfu-util.tar.gz
-              tar xvfz dfu-util.tar.gz
-              rm dfu-util.tar.gz    
+              wget -qO- "${URL}" | tar xvz -
           else
-              echo "ERROR ! Online URL ${URL} not found !"
+              echo "Previous version not found in bucket"
           fi
       - name: Build
         run: |
