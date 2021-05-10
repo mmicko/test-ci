@@ -16,6 +16,7 @@ jobs:
             tar xvfz dfu-util.tar.gz
             rm dfu-util.tar.gz        
           fi
+          /bin/true
       - name: Build
         run: |
           ./nightly.py build --arch=linux-x64 --target=dfu-util
