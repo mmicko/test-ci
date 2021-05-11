@@ -1,4 +1,4 @@
-name: linux-x64 
+name: dfu-util
 
 on:
   workflow_dispatch:
