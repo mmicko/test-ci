@@ -18,7 +18,7 @@ jobs:
           key: cache-sources-python3
       - name: Download previous build
         run: |
-          URL="https://github.com/mmicko/test-ci/releases/download/bucket/python3-linux-x64.tgz"
+          URL="https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-python3.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" | tar xvfz -
           else
@@ -27,14 +27,14 @@ jobs:
       - name: Build
         run: ./nightly.py build --no-update --arch=linux-x64 --target=python3 --single --tar
       - uses: ncipollo/release-action@v1
-        if: hashFiles('python3-linux-x64.tgz') != ''
+        if: hashFiles('linux-x64-python3.tgz') != ''
         with:
           allowUpdates: True
           omitBody: True
           omitBodyDuringUpdate: True
           omitNameDuringUpdate: True
           tag: bucket
-          artifacts: "python3-linux-x64.tgz"
+          artifacts: "linux-x64-python3.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-bba:
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
           key: cache-sources-nextpnr-bba
       - name: Download previous build
         run: |
-          URL="https://github.com/mmicko/test-ci/releases/download/bucket/nextpnr-bba-linux-x64.tgz"
+          URL="https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-nextpnr-bba.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" | tar xvfz -
           else
@@ -59,14 +59,14 @@ jobs:
       - name: Build
         run: ./nightly.py build --no-update --arch=linux-x64 --target=nextpnr-bba --single --tar
       - uses: ncipollo/release-action@v1
-        if: hashFiles('nextpnr-bba-linux-x64.tgz') != ''
+        if: hashFiles('linux-x64-nextpnr-bba.tgz') != ''
         with:
           allowUpdates: True
           omitBody: True
           omitBodyDuringUpdate: True
           omitNameDuringUpdate: True
           tag: bucket
-          artifacts: "nextpnr-bba-linux-x64.tgz"
+          artifacts: "linux-x64-nextpnr-bba.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-prjtrellis-bba:
     runs-on: ubuntu-latest
@@ -82,7 +82,7 @@ jobs:
           key: cache-sources-prjtrellis-bba
       - name: Download previous build
         run: |
-          URL="https://github.com/mmicko/test-ci/releases/download/bucket/prjtrellis-bba-linux-x64.tgz"
+          URL="https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-prjtrellis-bba.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" | tar xvfz -
           else
@@ -91,14 +91,14 @@ jobs:
       - name: Build
         run: ./nightly.py build --no-update --arch=linux-x64 --target=prjtrellis-bba --single --tar
       - uses: ncipollo/release-action@v1
-        if: hashFiles('prjtrellis-bba-linux-x64.tgz') != ''
+        if: hashFiles('linux-x64-prjtrellis-bba.tgz') != ''
         with:
           allowUpdates: True
           omitBody: True
           omitBodyDuringUpdate: True
           omitNameDuringUpdate: True
           tag: bucket
-          artifacts: "prjtrellis-bba-linux-x64.tgz"
+          artifacts: "linux-x64-prjtrellis-bba.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-nextpnr-ecp5:
     runs-on: ubuntu-latest
@@ -115,7 +115,7 @@ jobs:
           key: cache-sources-nextpnr-ecp5
       - name: Download previous build
         run: |
-          URL="https://github.com/mmicko/test-ci/releases/download/bucket/nextpnr-ecp5-linux-x64.tgz"
+          URL="https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-nextpnr-ecp5.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" | tar xvfz -
           else
@@ -130,12 +130,12 @@ jobs:
       - name: Build
         run: ./nightly.py build --no-update --arch=linux-x64 --target=nextpnr-ecp5 --single --tar
       - uses: ncipollo/release-action@v1
-        if: hashFiles('nextpnr-ecp5-linux-x64.tgz') != ''
+        if: hashFiles('linux-x64-nextpnr-ecp5.tgz') != ''
         with:
           allowUpdates: True
           omitBody: True
           omitBodyDuringUpdate: True
           omitNameDuringUpdate: True
           tag: bucket
-          artifacts: "nextpnr-ecp5-linux-x64.tgz"
+          artifacts: "linux-x64-nextpnr-ecp5.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
