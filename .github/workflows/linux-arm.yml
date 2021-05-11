@@ -72,7 +72,7 @@ jobs:
 
   linux-arm-nextpnr-generic:
     runs-on: ubuntu-latest
-    needs: [ linux-arm-python3, linux-x64-nextpnr-bba ]
+    needs: linux-arm-python3
     steps:
       - uses: actions/checkout@v2
         with:
@@ -110,7 +110,7 @@ jobs:
 
   linux-arm-nextpnr-ice40:
     runs-on: ubuntu-latest
-    needs: [ linux-arm-python3, linux-x64-icestorm-bba, linux-x64-nextpnr-bba ]
+    needs: linux-arm-python3
     steps:
       - uses: actions/checkout@v2
         with:
@@ -150,7 +150,7 @@ jobs:
 
   linux-arm-nextpnr-ecp5:
     runs-on: ubuntu-latest
-    needs: [ linux-arm-python3, linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba ]
+    needs: linux-arm-python3
     steps:
       - uses: actions/checkout@v2
         with:
@@ -190,7 +190,7 @@ jobs:
 
   linux-arm-nextpnr-machxo2:
     runs-on: ubuntu-latest
-    needs: [ linux-arm-python3, linux-x64-nextpnr-bba, linux-x64-prjtrellis-bba ]
+    needs: linux-arm-python3
     steps:
       - uses: actions/checkout@v2
         with:
@@ -230,7 +230,7 @@ jobs:
 
   linux-arm-nextpnr-nexus:
     runs-on: ubuntu-latest
-    needs: [ linux-arm-python3, linux-x64-nextpnr-bba, linux-x64-prjoxide-bba ]
+    needs: linux-arm-python3
     steps:
       - uses: actions/checkout@v2
         with:
@@ -1218,7 +1218,7 @@ jobs:
 
   linux-arm-default:
     runs-on: ubuntu-latest
-    needs: [ linux-arm-avy, linux-arm-boolector, linux-arm-dfu-util, linux-arm-ecpdap, linux-arm-ecpprog, linux-arm-flask, linux-arm-fujprog, linux-arm-gtkwave, linux-arm-icesprog, linux-arm-icestorm, linux-arm-iverilog, linux-arm-litex, linux-arm-mcy, linux-arm-nextpnr-ecp5, linux-arm-nextpnr-generic, linux-arm-nextpnr-ice40, linux-arm-nextpnr-machxo2, linux-arm-nextpnr-nexus, linux-arm-openfpgaloader, linux-arm-openocd, linux-arm-pono, linux-arm-prjtrellis, linux-arm-python-programmers, linux-arm-python2, linux-arm-python3, linux-arm-sby, linux-arm-sby-gui, linux-arm-suprove, linux-arm-system-resources, linux-arm-verilator, linux-arm-xdot, linux-arm-yices, linux-arm-yosys, linux-arm-z3 ]
+    needs: [ linux-arm-avy, linux-arm-boolector, linux-arm-dfu-util, linux-arm-ecpdap, linux-arm-ecpprog, linux-arm-flask, linux-arm-fujprog, linux-arm-gtkwave, linux-arm-icesprog, linux-arm-icestorm, linux-arm-iverilog, linux-arm-litex, linux-arm-mcy, linux-arm-nextpnr-ecp5, linux-arm-nextpnr-generic, linux-arm-nextpnr-ice40, linux-arm-nextpnr-machxo2, linux-arm-nextpnr-nexus, linux-arm-openfpgaloader, linux-arm-openocd, linux-arm-pono, linux-arm-prjtrellis, linux-arm-python-programmers, linux-arm-python2, linux-arm-python3, linux-arm-sby, linux-arm-sby-gui, linux-arm-suprove, linux-arm-system-resources, linux-arm-verilator, linux-arm-yices, linux-arm-yosys, linux-arm-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -1286,8 +1286,6 @@ jobs:
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-arm-system-resources.tgz" | tar xvfz -
       - name: Download linux-arm-verilator
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-arm-verilator.tgz" | tar xvfz -
-      - name: Download linux-arm-xdot
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-arm-xdot.tgz" | tar xvfz -
       - name: Download linux-arm-yices
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-arm-yices.tgz" | tar xvfz -
       - name: Download linux-arm-yosys
@@ -1306,5 +1304,3 @@ jobs:
           tag: fpga-nightly-${{ steps.date.outputs.date }}
           artifacts: "_outputs/linux-arm/default/*.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
-
-
