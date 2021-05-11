@@ -18,7 +18,7 @@ jobs:
           key: cache-sources-dfu-util
       - name: Download a file
         run: |
-          URL="https://github.com/mmicko/test-ci/releases/download/bucket/dfu-util-linux-x64.tar.gz"
+          URL="https://github.com/mmicko/test-ci/releases/download/bucket/dfu-util-linux-x64.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" | tar xvfz -
           else
@@ -27,7 +27,7 @@ jobs:
       - name: Build
         run: ./nightly.py build --no-update --arch=linux-x64 --target=dfu-util --single --tar
       - uses: ncipollo/release-action@v1
-        if: hashFiles('dfu-util-linux-x64.tar.gz') != ''
+        if: hashFiles('dfu-util-linux-x64.tgz') != ''
         with:
           allowUpdates: True
           omitBody: True
