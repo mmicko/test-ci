@@ -1,31 +1,38 @@
-name: dfu-util
+name: linux-x64 
 
 on:
   workflow_dispatch:
+
 jobs:
-  dfu-util:
+  linux-x64-dfu-util:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           repository: 'yosyshq/fpga-nightly'
+      - name: Cache sources
+        id: cache-sources
+        uses: actions/cache@v2
+        with:
+          path: _sources
+          key: cache-sources-dfu-util
       - name: Download a file
         run: |
-          URL="https://github.com/mmicko/test-ci/releases/download/bucket/dfu-util.tar.gz"
+          URL="https://github.com/mmicko/test-ci/releases/download/bucket/dfu-util-linux-x64.tar.gz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
       - name: Build
-        run: |
-          ./nightly.py build --arch=linux-x64 --target=dfu-util
-          tar cvfz dfu-util.tar.gz _outputs/linux-x64/dfu-util
+        run: ./nightly.py build --no-update --arch=linux-x64 --target=dfu-util --single --tar
       - uses: ncipollo/release-action@v1
-        if: hashFiles('dfu-util.tar.gz') != ''
+        if: hashFiles('dfu-util-linux-x64.tar.gz') != ''
         with:
           allowUpdates: True
-          body: ""
+          omitBody: True
+          omitBodyDuringUpdate: True
+          omitNameDuringUpdate: True
           tag: bucket
-          artifacts: "dfu-util.tar.gz"
+          artifacts: "dfu-util-linux-x64.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
