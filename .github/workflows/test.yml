@@ -1,4 +1,4 @@
-name: formal 
+name: formal
 
 on:
   workflow_dispatch:
@@ -300,7 +300,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-smt-switch:
     runs-on: ubuntu-latest
-    needs: [ linux-x64-cvc4, linux-x64-boolector ]
+    needs: [ linux-x64-boolector, linux-x64-cvc4 ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -319,10 +319,10 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
-      - name: Download linux-x64-cvc4
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-cvc4.tgz" | tar xvfz -
       - name: Download linux-x64-boolector
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-boolector.tgz" | tar xvfz -
+      - name: Download linux-x64-cvc4
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-cvc4.tgz" | tar xvfz -
       - name: Build
         run: ./nightly.py build --no-update --arch=linux-x64 --target=smt-switch --single --tar
       - uses: ncipollo/release-action@v1
@@ -337,7 +337,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-pono:
     runs-on: ubuntu-latest
-    needs: [ linux-x64-smt-switch, linux-x64-boolector ]
+    needs: [ linux-x64-boolector, linux-x64-cvc4, linux-x64-smt-switch ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -356,10 +356,12 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
-      - name: Download linux-x64-smt-switch
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-smt-switch.tgz" | tar xvfz -
       - name: Download linux-x64-boolector
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-boolector.tgz" | tar xvfz -
+      - name: Download linux-x64-cvc4
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-cvc4.tgz" | tar xvfz -
+      - name: Download linux-x64-smt-switch
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-smt-switch.tgz" | tar xvfz -
       - name: Build
         run: ./nightly.py build --no-update --arch=linux-x64 --target=pono --single --tar
       - uses: ncipollo/release-action@v1
@@ -601,7 +603,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
   linux-x64-default-formal:
     runs-on: ubuntu-latest
-    needs: [ linux-x64-yosys, linux-x64-avy, linux-x64-boolector, linux-x64-yices, linux-x64-suprove, linux-x64-pono, linux-x64-z3, linux-x64-mcy, linux-x64-sby, linux-x64-sby-gui, linux-x64-gtkwave, linux-x64-python2, linux-x64-system-resources, linux-x64-python3, linux-x64-flask, linux-x64-xdot ]
+    needs: [ linux-x64-avy, linux-x64-boolector, linux-x64-flask, linux-x64-gtkwave, linux-x64-mcy, linux-x64-pono, linux-x64-python2, linux-x64-python3, linux-x64-sby, linux-x64-sby-gui, linux-x64-suprove, linux-x64-system-resources, linux-x64-xdot, linux-x64-yices, linux-x64-yosys, linux-x64-z3 ]
     steps:
       - name: Get current date
         id: date
@@ -623,38 +625,38 @@ jobs:
           else
               echo "Previous version not found in bucket"
           fi
-      - name: Download linux-x64-yosys
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-yosys.tgz" | tar xvfz -
       - name: Download linux-x64-avy
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-avy.tgz" | tar xvfz -
       - name: Download linux-x64-boolector
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-boolector.tgz" | tar xvfz -
-      - name: Download linux-x64-yices
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-yices.tgz" | tar xvfz -
-      - name: Download linux-x64-suprove
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-suprove.tgz" | tar xvfz -
-      - name: Download linux-x64-pono
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-pono.tgz" | tar xvfz -
-      - name: Download linux-x64-z3
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-z3.tgz" | tar xvfz -
+      - name: Download linux-x64-flask
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-flask.tgz" | tar xvfz -
+      - name: Download linux-x64-gtkwave
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-gtkwave.tgz" | tar xvfz -
       - name: Download linux-x64-mcy
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-mcy.tgz" | tar xvfz -
+      - name: Download linux-x64-pono
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-pono.tgz" | tar xvfz -
+      - name: Download linux-x64-python2
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-python2.tgz" | tar xvfz -
+      - name: Download linux-x64-python3
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-python3.tgz" | tar xvfz -
       - name: Download linux-x64-sby
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-sby.tgz" | tar xvfz -
       - name: Download linux-x64-sby-gui
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-sby-gui.tgz" | tar xvfz -
-      - name: Download linux-x64-gtkwave
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-gtkwave.tgz" | tar xvfz -
-      - name: Download linux-x64-python2
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-python2.tgz" | tar xvfz -
+      - name: Download linux-x64-suprove
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-suprove.tgz" | tar xvfz -
       - name: Download linux-x64-system-resources
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-system-resources.tgz" | tar xvfz -
-      - name: Download linux-x64-python3
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-python3.tgz" | tar xvfz -
-      - name: Download linux-x64-flask
-        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-flask.tgz" | tar xvfz -
       - name: Download linux-x64-xdot
         run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-xdot.tgz" | tar xvfz -
+      - name: Download linux-x64-yices
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-yices.tgz" | tar xvfz -
+      - name: Download linux-x64-yosys
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-yosys.tgz" | tar xvfz -
+      - name: Download linux-x64-z3
+        run: wget -qO- "https://github.com/mmicko/test-ci/releases/download/bucket/linux-x64-z3.tgz" | tar xvfz -
       - name: Build
         run: ./nightly.py build --no-update --arch=linux-x64 --target=default-formal --single
       - uses: ncipollo/release-action@v1
