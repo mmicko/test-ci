@@ -25,7 +25,7 @@ jobs:
               echo "Previous version not found in bucket"
           fi
       - name: Install dependencies
-        run: brew install bundle
+        run: brew bundle
       - name: Build
         run: ./nightly.py build --arch=darwin-x64 --target=dfu-util --single --tar
       - uses: ncipollo/release-action@v1
