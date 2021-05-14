@@ -34,6 +34,6 @@ jobs:
           omitBody: True
           omitBodyDuringUpdate: True
           omitNameDuringUpdate: True
-          tag: bucket
+          tag: bucket-linux-x64
           artifacts: "linux-x64-ecpprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
