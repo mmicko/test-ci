@@ -4,37 +4,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  darwin-x64-dfu-util:
-    runs-on: macos-10.14
+  darwin-x64-ecpprog:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: 'yosyshq/fpga-nightly'
+          repository: 'yosyshq/oss-cad-suite-build'
       - name: Cache sources
         id: cache-sources
         uses: actions/cache@v2
         with:
           path: _sources
-          key: cache-sources-dfu-util
+          key: cache-sources-ecpprog
       - name: Download previous build
         run: |
-          URL="https://github.com/mmicko/test-ci/releases/download/bucket/darwin-x64-dfu-util.tgz"
+          URL="https://github.com/mmicko/test-ci/releases/download/bucket-darwin-x64/darwin-x64-ecpprog.tgz"
           if wget --spider "${URL}" 2>/dev/null; then
               wget -qO- "${URL}" | tar xvfz -
           else
               echo "Previous version not found in bucket"
           fi
-      - name: Install dependencies
-        run: brew bundle
       - name: Build
-        run: ./nightly.py build --arch=darwin-x64 --target=dfu-util --single --tar
+        run: ./builder.py build --arch=darwin-x64 --target=ecpprog --single --tar
       - uses: ncipollo/release-action@v1
-        if: hashFiles('darwin-x64-dfu-util.tgz') != ''
+        if: hashFiles('darwin-x64-ecpprog.tgz') != ''
         with:
           allowUpdates: True
+          prerelease: True
           omitBody: True
           omitBodyDuringUpdate: True
           omitNameDuringUpdate: True
-          tag: bucket
-          artifacts: "darwin-x64-dfu-util.tgz"
+          tag: bucket-darwin-x64
+          artifacts: "darwin-x64-ecpprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
