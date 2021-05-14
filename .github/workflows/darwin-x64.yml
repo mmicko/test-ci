@@ -9,9 +9,11 @@ on:
 
 jobs:
   darwin-x64-ecpprog:
-    if: ${{ github.event.workflow_run.conclusion == 'success'  || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check previous build
+        if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+        run: /bin/false
       - uses: actions/checkout@v2
         with:
           repository: 'yosyshq/oss-cad-suite-build'
@@ -42,4 +44,5 @@ jobs:
           tag: bucket-darwin-x64
           artifacts: "darwin-x64-ecpprog.tgz"
           token: ${{ secrets.GITHUB_TOKEN }}
+      
 
