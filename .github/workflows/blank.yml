@@ -32,5 +32,10 @@ jobs:
         with:
           name: vcxsrc
           path: .
-      - name: Build
+      - name: unzip
         run: unzip yosys-win32-vcxsrc-latest.zip
+      - name: setup-msbuild
+        uses: microsoft/setup-msbuild@v1
+      - name: MSBuild
+        working-directory: yosys-win32-vcxsrc-latest
+        run: msbuild YosysVS.sln
