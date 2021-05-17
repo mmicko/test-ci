@@ -25,7 +25,7 @@ jobs:
           path: yosys-win32-vcxsrc-latest.zip
   
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: yosys-vcxsrc
     steps:  
       - uses: actions/download-artifact@v2
