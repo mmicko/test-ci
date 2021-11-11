@@ -8,5 +8,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: YosysHQ/setup-oss-cad-suite@v1
+      - uses: mmicko/setup-oss-cad-suite@v1
       - run: yosys --version
