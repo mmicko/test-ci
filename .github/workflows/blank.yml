@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  yosys-vcxsrc:
-    runs-on: ubuntu-latest
+  test_oss_cad_suite:
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: mmicko/setup-oss-cad-suite@v1
